@@ -3,15 +3,36 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <head>
-<title>Metodo del punto unito</title>
+<title>FunFunction</title>
+<style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+  }
+th, td {
+    padding: 15px;
+}
+th{
+  background: #C0C0C0;
+}
+pre{
+  border:0px;
+  text-align: center;
+}
+</style>
 </head>
 <body>
-<div class="row">
+<!--<div class="row">
   <div class="col-sm-3"></div>
   <div class="col-sm-6">
     <p></p>
     <h1>Metodo di risoluzione delle equazioni del punto unito</h1>
     <br>
+    <div class="row">
+        grafico
+        <div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
+    </div>
     <div class="col-sm-10 row">
       <div class="input-group">
         <span class="input-group-addon" id="basic-addon1">0 = </span>
@@ -41,8 +62,77 @@
     <p id="res"></p>    
   </div>
 </div>
-<div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
-<div id="curve_chart1" class="col-sm-6" style="height: 500px"></div>
+-->
+<div class="row">
+   <div class="col-sm-6"> </div>
+  <div class="col-sm-6">
+    <h1 style="text-align: center">Studia la tua funzione</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-1"> </div>
+  <div class="col-sm-5"> 
+      <table style="width:100%">
+      <caption><h1 style="text-align: center;">RISULTATI</h1></caption>
+      <tr>
+        <th>C.E.</th>
+        <th>SIMMETRIA</th> 
+        <th>INTERSEZIONE CON GLI ASSI</th>
+      </tr>
+      <tr>
+        <td>Jill</td>
+        <td>Smith</td> 
+        <td>
+          <pre style="background: white"> ASSE X : 
+ASSE Y :
+          </pre>
+        </td>
+      </tr>
+      <tr>
+        <th>STUDIO DEL SEGNO</th>
+        <th>LIMITI</th> 
+        <th>DERIVATA PRIMA</th>
+      </tr>
+      <tr>
+        <td>Jill</td>
+        <td>Smith</td> 
+        <td>
+          <pre style="background: white"> ASSE X : 
+ASSE Y :
+          </pre>
+        </td>
+      </tr>
+       <tr>
+        <th>DERIVATA SECONDA</th>
+        <th>ASINTOTI OBLIQUI</th> 
+        <th>STUDIO DEGLI ZERI</th>
+      </tr>
+      <tr>
+        <td>Jill</td>
+        <td>Smith</td> 
+        <td>
+          <pre style="background: white"> ASSE X : 
+ASSE Y :
+          </pre>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
+</div>
+<div class="row">
+  <div class="col-sm-7"></div>
+  <div class="col-sm-4">
+      <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">f(x) = </span>
+          <input type="text" class="form-control" placeholder="Input your equation" id="eq">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" id="c">Do stuff</button>
+          </span>    
+      </div>
+</div>
+</div>
+<br>
 </body>
 <script type="text/javascript" src="jQ_320.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -50,7 +140,14 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
   jQuery(document).ready(($) => {
-
+    //chart stuff
+          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
+            var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, options);
+          }
     $("#c").click(() => {
       $("#res").html('')
       var a = parseFloat($("#a").val())
@@ -164,20 +261,12 @@
               console.log(ap)
             }
           }
-          
           //chart stuff
           google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
           function drawChart() {
             var data = google.visualization.arrayToDataTable(chartPoints(fx));
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, options);
-          }
-          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart1);
-          function drawChart1() {
-            var data = google.visualization.arrayToDataTable(chartPoints(gx));
-            var options = {title:'x=g(x)',curveType:'function',legend:{position:'bottom'}};
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
             chart.draw(data, options);
           }
         }
