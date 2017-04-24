@@ -141,13 +141,13 @@ ASSE Y :
 <script>
   jQuery(document).ready(($) => {
     //chart stuff
-          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
-          function drawChart() {
-            var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
-            var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, options);
-          }
+    google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
+      var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      chart.draw(data, options);
+    }
     $("#c").click(() => {
       $("#res").html('')
       var a = parseFloat("-10")
@@ -242,8 +242,24 @@ ASSE Y :
           }return false
         }
 
+        limits('(x^2-2x-4)/x',[0])
 
-        exec()
+        function limits(equation, ce){
+          let limits = {}
+          limits.minf = math.eval(equation, {'x': -Infinity})
+          limits.pinf = math.eval(equation, {'x': Infinity})
+          ce.forEach(n => {
+            let less = limits[n]['m']
+            less = math.eval(equation, {'x': n - .0001})
+            limits[n].p = math.eval(equation, {'x': n + .0001})
+          });
+          console.log(limits)
+          return limits
+        }
+
+        function obasynthote(){}
+
+        //exec()
 
         function exec(){
           let fx = $("#eq").val()
