@@ -150,8 +150,8 @@ ASSE Y :
           }
     $("#c").click(() => {
       $("#res").html('')
-      var a = parseFloat($("#a").val())
-      var b = parseFloat($("#b").val())
+      var a = parseFloat("-10")
+      var b = parseFloat("10")
       if(a>=b){$("#res").attr('style', 'color:red;').html("a dev'essere minore di b")}
       else{
         function chartPoints(equation){
@@ -247,10 +247,10 @@ ASSE Y :
 
         function exec(){
           let fx = $("#eq").val()
-          let gx = $("#eqx").val()
+          //let gx = $("#eqx").val()
           let d1 = math.derivative(math.parse(fx), 'x').toString()
           let d2 = math.derivative(math.parse(d1), 'x').toString()
-          let g1 = math.derivative(math.parse(gx), 'x').toString()
+          //let g1 = math.derivative(math.parse(gx), 'x').toString()
 
           if(uniqueness(fx, d1, d2)){
             let p = g1abs(g1)
