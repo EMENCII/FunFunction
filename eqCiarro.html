@@ -246,18 +246,26 @@ ASSE Y :
 
         function limits(equation, ce){
           let limits = {}
-          limits.minf = math.eval(equation, {'x': -Infinity})
-          limits.pinf = math.eval(equation, {'x': Infinity})
+          limits.minf = math.eval(equation, {'x': -1000000})
+          limits.pinf = math.eval(equation, {'x': 1000000})
           ce.forEach(n => {
-            let less = limits[n]['m']
-            less = math.eval(equation, {'x': n - .0001})
+            limits[n]['m'] = math.eval(equation, {'x': n - .0001})
             limits[n].p = math.eval(equation, {'x': n + .0001})
           });
           console.log(limits)
           return limits
         }
 
-        function obasynthote(){}
+        function obasymptote(eq, lim){
+          if(lim.minf > 1000000.5 || lim.minf < -1000000.5 || lim.pinf > 1000000.5 || lim.pinf < -1000000.5){
+            let m = math.eval('('+eq+')/x', {'x': 1000000})
+            if(m < 1000000.5){
+              let q = math.eval('('+eq+')-('+m+'*x)', {'x': 1000000})
+              if(q<0) return 'y='+m+'x'+q
+              else return 'y='+m+'x+'+q
+            }
+          }return 'the function does not have any asymptote'
+        }
 
         //exec()
 
