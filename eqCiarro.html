@@ -23,36 +23,32 @@ pre{
 </style>
 </head>
 <body>
-<!--<div class="row">
-  <div class="col-sm-3"></div>
-  <div class="col-sm-6">
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
     <p></p>
-    <h1>Metodo di risoluzione delle equazioni del punto unito</h1>
+    <h1>Compara i metodi di risoluzione approssimata delle equazioni</h1>
     <br>
-    <div class="row">
-        grafico
-        <div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
-    </div>
-    <div class="col-sm-10 row">
-      <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1">0 = </span>
-        <input type="text" class="form-control" placeholder="Input your equation" id="eq">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" id="c">Do stuff</button>
-        </span>    
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1">x = </span>
-        <input type="text" class="form-control" placeholder="Convert your equation" id="eqx">
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <input type="number" class="form-control" placeholder="a" id="a">
-      <br>
-      <input type="number" class="form-control" placeholder="b" id="b">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">f(x) = </span>
+      <input type="text" class="form-control" placeholder="Input your equation" id="eq">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" id="c">Do stuff</button>
+      </span>    
     </div>
     <br>
+    <p>Definisci l'intervallo</p>
+    <div class='row'>
+      <div class="col-sm-1">
+        <input type="number" class="form-control" placeholder="a" id="a"></div>
+      <div class="col-sm-1">
+        <input type="number" class="form-control" placeholder="b" id="b"></div>
+      <p id='er'></p>
+    </div>
+  <br><br>
+  <div class="row">
+    <div id="curve_chart1" class="col-sm-6" style="position: block; height: 400px; width: inherit;"></div>
+  </div>
   </div>
 </div>
 <br>
@@ -62,7 +58,6 @@ pre{
     <p id="res"></p>    
   </div>
 </div>
--->
 <div class="row">
    <div class="col-sm-6"> </div>
   <div class="col-sm-6">
@@ -118,7 +113,6 @@ ASSE Y :
       </tr>
     </table>
   </div>
-  <div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
 </div>
 <div class="row">
   <div class="col-sm-7"></div>
@@ -145,7 +139,7 @@ ASSE Y :
     function drawChart() {
       var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
       var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
-      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart1'));
       chart.draw(data, options);
     }
     $("#c").click(() => {
@@ -155,7 +149,7 @@ ASSE Y :
       if(a>=b){$("#res").attr('style', 'color:red;').html("a dev'essere minore di b")}
       else{
         function chartPoints(equation){
-          let points = [['x', equation]]
+          let points = []
           let cursor = a
           while(cursor <= b) {
             let y = Math.round(math.eval(equation, {'x': cursor}) * 1000) / 1000
@@ -163,6 +157,7 @@ ASSE Y :
               points.push([Math.round(cursor * 100) / 100, y])
             cursor = Math.round((cursor + .02) * 100) / 100
           }
+          console.log(points)
           return points
         }
 
@@ -232,14 +227,14 @@ ASSE Y :
         }
 
         function g1abs(eq){
-          let cursor = a; let p
+          let cursor = a; let p; let a;
           while(cursor <= b){
-            p = Math.abs(math.eval(eq, {'x':cursor}))
-            if(p > 0 && p < 1){
-              console.log(p)
-              return p
-            }else{cursor = Math.round((cursor + .02) * 100) / 100}
-          }return false
+            a = Math.abs(math.eval(eq, {'x':cursor}))
+            if(a < 0.001) console.log(p); return
+            if(p > a) p = a; console.log(p)
+            //else return
+            cursor = Math.round((cursor + .02) * 100) / 100
+          }
         }
 
         limits('(x^2-2x-4)/x',[0])
@@ -249,6 +244,7 @@ ASSE Y :
           limits.minf = math.eval(equation, {'x': -1000000})
           limits.pinf = math.eval(equation, {'x': 1000000})
           ce.forEach(n => {
+          limits[n] = {}
             limits[n]['m'] = math.eval(equation, {'x': n - .0001})
             limits[n].p = math.eval(equation, {'x': n + .0001})
           });
@@ -267,7 +263,7 @@ ASSE Y :
           }return 'the function does not have any asymptote'
         }
 
-        //exec()
+        exec()
 
         function exec(){
           let fx = $("#eq").val()
@@ -285,14 +281,34 @@ ASSE Y :
               console.log(ap)
             }
           }
+
+          google.charts.load('current', {'packages':['line']});google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'x');
+            data.addColumn('number', fx);
+
+            data.addRows(chartPoints(fx));
+
+            var options = {
+              chart: {
+              },
+              width: 500,
+              height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('curve_chart'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+          }
           //chart stuff
-          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
+          /*google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
           function drawChart() {
             var data = google.visualization.arrayToDataTable(chartPoints(fx));
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
             chart.draw(data, options);
-          }
+          }*/
         }
       }
     });
