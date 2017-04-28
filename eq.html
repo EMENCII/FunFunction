@@ -142,31 +142,31 @@ ASSE Y :
   jQuery(document).ready(($) => {
     //chart stuff
           google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
-          function drawChart() {
-            var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
+          function drawChart() { //disegna il grfico
+            var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);//primo vettore sono gli assi, poi ci sono i punti
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
             chart.draw(data, options);
           }
     $("#c").click(() => {
       $("#res").html('')
-      var a = parseFloat("-10")
+      var a = parseFloat("-10")//TODO dinamico
       var b = parseFloat("10")
-      if(a>=b){$("#res").attr('style', 'color:red;').html("a dev'essere minore di b")}
+      if(a>=b){$("#res").attr('style', 'color:red;').html("a dev'essere minore di b")} //errore se l'inizio dell'intervallo è maggiore della fine
       else{
-        function chartPoints(equation){
-          let points = [['x', equation]]
+        function chartPoints(equation){ //calcola i punti della funzione
+          let points = [['x', equation]] //assi
           let cursor = a
           while(cursor <= b) {
             let y = Math.round(math.eval(equation, {'x': cursor}) * 1000) / 1000
-            if(Math.abs(y) < 25)
+            if(Math.abs(y) < 25) //limita l'altezza del grafico, togliere se lo zoom funziona correttamente
               points.push([Math.round(cursor * 100) / 100, y])
             cursor = Math.round((cursor + .02) * 100) / 100
           }
           return points
         }
 
-        function continuity(eq){
+        function continuity(eq){ //continuità, controlla che la funzione non sia infinito all'interno dell'intervallo
           let cursor = a
           let p = 0
           while(cursor<=b){
@@ -179,7 +179,7 @@ ASSE Y :
           return true
         }
 
-        function existenceOfZero(eq){
+        function existenceOfZero(eq){ //se la f è continua calcola l'esistenza degli zeri
           if(continuity(eq)){
             if(math.eval(eq, {'x': a}) * math.eval(eq, {'x': b}) < 0){
               return true
@@ -189,16 +189,16 @@ ASSE Y :
           }else{return 'nc'}
         }
 
-        function moreorless(derivative){
+        function moreorless(derivative){ //controlla che le derivate non cambino segno
           let cursor = a; let sign; let dh = derivative
-           if(math.eval(dh, {'x': cursor}) > 0) sign='+'
-           else if(math.eval(dh, {'x': cursor}) < 0) sign='-'
+           if(math.eval(dh, {'x': cursor}) > 0) sign='+' //se in a la d è positiva segno è +
+           else if(math.eval(dh, {'x': cursor}) < 0) sign='-' //se no -
            else
-             return false
+             return false //se è zero non va già bene
 
           while(cursor <= b){
             if(math.eval(dh, {'x': cursor}) == 0 || math.eval(dh, {'x': cursor}) > 0 && sign == '-' || math.eval(dh, {'x': cursor}) < 0 && sign == '+'){
-              return false
+              return false //non è sempre negativa o positiva se è negativa e il segno era positivo, e viceversa. se diventa 0 returna falso
             }
             else{
               cursor = Math.round((cursor + .02) * 100) / 100
@@ -207,11 +207,10 @@ ASSE Y :
           return true
         }
         
-        function uniqueness(equation,derivative1,derivative2){
+        function uniqueness(equation,derivative1,derivative2){ //unicità
           let xis = existenceOfZero(equation)
-          console.log(xis, equation)
-          if(xis === true){
-            if(moreorless(derivative1) || moreorless(derivative2)){
+          if(xis === true){ //se esiste uno zero
+            if(moreorless(derivative1) || moreorless(derivative2)){ //se uno dei teoremi di unicità è verificato
               $("#res").attr('style', 'color:black;').html("esiste un solo zero all'interno dell'intervallo")
               return true
             }else{
@@ -222,7 +221,7 @@ ASSE Y :
           else{$("#res").attr('style', 'color:black;').html("la funzione non è continua");return false}
         }
 
-        function approximation(p, eq){
+        function approximation(p, eq){ //metodo del punto unito v1.tuamadre
           let x = p
           for (var i = 210; i >= 1; i--) {
             console.log(x)
@@ -231,7 +230,7 @@ ASSE Y :
           return x
         }
 
-        function g1abs(eq){
+        function g1abs(eq){ //propedeutico a ciò che è sopra
           let cursor = a; let p
           while(cursor <= b){
             p = Math.abs(math.eval(eq, {'x':cursor}))
@@ -245,7 +244,7 @@ ASSE Y :
 
         exec()
 
-        function exec(){
+        function exec(){ // funzione principale
           let fx = $("#eq").val()
           //let gx = $("#eqx").val()
           let d1 = math.derivative(math.parse(fx), 'x').toString()
@@ -255,14 +254,14 @@ ASSE Y :
           if(uniqueness(fx, d1, d2)){
             let p = g1abs(g1)
             let ap
-            if(p === false){$("#res").append(' - the approximation method is not applicable')}
+            if(p === false){$("#res").append(' - the approximation method is not applicable')} //sempre riguardante il punto unito
             else{
               ap = approximation(p, gx)
               console.log(ap)
             }
           }
           //chart stuff
-          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
+          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
           function drawChart() {
             var data = google.visualization.arrayToDataTable(chartPoints(fx));
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
