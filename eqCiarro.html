@@ -47,7 +47,7 @@ pre{
     </div>
   <br><br>
   <div class="row">
-    <div id="curve_chart1" class="col-sm-6" style="position: block; height: 400px; width: inherit;"></div>
+    <div id="curve_chart1" class="col-sm-6" style="width: 1100px; height: 400px"></div>
   </div>
   </div>
 </div>
@@ -232,12 +232,15 @@ ASSE Y :
             a = Math.abs(math.eval(eq, {'x':cursor}))
             if(a < 0.001) console.log(p); return
             if(p > a) p = a; console.log(p)
-            //else return
             cursor = Math.round((cursor + .02) * 100) / 100
           }
         }
 
-        limits('(x^2-2x-4)/x',[0])
+        function sec(eq, a, b){
+          //let 1 = a; let 2 = b
+          //let f[1] = math.eval(eq, {'x': a}); let f[2] = math.eval(eq, {'x': b})
+          //let f[3] = 
+        }
 
         function limits(equation, ce){
           let limits = {}
@@ -245,7 +248,7 @@ ASSE Y :
           limits.pinf = math.eval(equation, {'x': 1000000})
           ce.forEach(n => {
           limits[n] = {}
-            limits[n]['m'] = math.eval(equation, {'x': n - .0001})
+            limits[n].m = math.eval(equation, {'x': n - .0001})
             limits[n].p = math.eval(equation, {'x': n + .0001})
           });
           console.log(limits)
@@ -260,7 +263,7 @@ ASSE Y :
               if(q<0) return 'y='+m+'x'+q
               else return 'y='+m+'x+'+q
             }
-          }return 'the function does not have any asymptote'
+          }return 'the function does not have any oblique asymptote'
         }
 
         exec()
