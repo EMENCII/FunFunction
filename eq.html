@@ -105,6 +105,7 @@ pre{
     </div>
     <br><br>
     <div class="row">
+      <div class="col-sm-1"></div>
       <div id="curve_chart" class="col-sm-6" style="width: 1100px; height: 400px"></div>
     </div>
       <br>
@@ -243,18 +244,58 @@ pre{
             }else{cursor = Math.round((cursor + .02) * 100) / 100}
           }return false
         }
+        function segno(eq){ // Studio del segno torna un vettore di oggetti con dentro tutti i cambiamenti di segno della funzione
+          let cursor = -3; let y;
+          let b = 3;
+          let segni = [];
+          y = math.eval(eq, {'x':cursor})
+          while(cursor < b){
+            console.log("primo while");
+            let x1 = cursor ;
+              if(y>0){
+                console.log("if y>0");
+                  while(y>0 && cursor<b){
+                    console.log("while y>0")
+                    cursor = Math.round((cursor + .02) * 100) / 100
+                    y = math.eval(eq, {'x':cursor})
+                  }
+                  segni.push({
+                    "x1":x1,
+                    "x2":cursor,
+                    "segno":"positivo"
+                  });
+                  console.log("while y>0 segni", segni);
+              }else if (y<0){
+                console.log("if y<0")
+                  while(y<0 && cursor<b){
+                    console.log("while y<0")
+                    cursor = Math.round((cursor + .02) * 100) / 100
+                    y = math.eval(eq, {'x':cursor})
+                  }
+                  segni.push({
+                    "x1":x1,
+                    "x2":cursor,
+                    "segno":"negativo"
+                  });
+                  console.log(segni);
+              }else{
+                console.log("else ")
+              }
+          }        
+        }
+
 
 
         exec()
 
         function exec(){ // funzione principale
-          let fx = $("#eq").val()
+         /* let fx = $("#eq").val()
           //let gx = $("#eqx").val()
           let d1 = math.derivative(math.parse(fx), 'x').toString()
           let d2 = math.derivative(math.parse(d1), 'x').toString()
-          //let g1 = math.derivative(math.parse(gx), 'x').toString()
-
-          if(uniqueness(fx, d1, d2)){
+          //let g1 = math.derivative(math.parse(gx), 'x').toString()   */
+          segno("x^2-3")
+        /*  if(uniqueness(fx, d1, d2)){
             let p = g1abs(g1)
             let ap
             if(p === false){$("#res").append(' - the approximation method is not applicable')} //sempre riguardante il punto unito
@@ -262,15 +303,15 @@ pre{
               ap = approximation(p, gx)
               console.log(ap)
             }
-          }
+          }   */
           //chart stuff
-          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
+        /*  google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
           function drawChart() {
             var data = google.visualization.arrayToDataTable(chartPoints(fx));
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
             chart.draw(data, options);
-          }
+          } */
         }
       }
     });
