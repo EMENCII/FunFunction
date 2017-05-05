@@ -236,10 +236,12 @@ ASSE Y :
           }
         }
 
-        function sec(eq, a, b){
-          //let 1 = a; let 2 = b
-          //let f[1] = math.eval(eq, {'x': a}); let f[2] = math.eval(eq, {'x': b})
-          //let f[3] = 
+        function sec(eq, interval, derivatives){
+          if()
+          let a = [{'x': b, 'f': math.eval(eq, {'x': b})},{'x': a, 'f': math.eval(eq, {'x': a})}]
+          
+          let x = a[0].x - a[0].f * ((a[0].x - a[1].x)/(a[0].f - a[1].f))
+          a.pop(); a.unshift({'x': x, 'f': math.eval(eq, {'x': x})})
         }
 
         function limits(equation, ce){

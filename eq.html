@@ -250,12 +250,9 @@ pre{
           let segni = [];
           y = math.eval(eq, {'x':cursor})
           while(cursor < b){
-            console.log("primo while");
             let x1 = cursor ;
-              if(y>0){
-                console.log("if y>0");
+              if(y>=0){
                   while(y>0 && cursor<b){
-                    console.log("while y>0")
                     cursor = Math.round((cursor + .02) * 100) / 100
                     y = math.eval(eq, {'x':cursor})
                   }
@@ -264,11 +261,8 @@ pre{
                     "x2":cursor,
                     "segno":"positivo"
                   });
-                  console.log("while y>0 segni", segni);
               }else if (y<0){
-                console.log("if y<0")
                   while(y<0 && cursor<b){
-                    console.log("while y<0")
                     cursor = Math.round((cursor + .02) * 100) / 100
                     y = math.eval(eq, {'x':cursor})
                   }
@@ -277,11 +271,10 @@ pre{
                     "x2":cursor,
                     "segno":"negativo"
                   });
-                  console.log(segni);
-              }else{
-                console.log("else ")
               }
-          }        
+          }   
+          console.log('segni fuori dal while',segni);   
+          return segni; 
         }
 
 
