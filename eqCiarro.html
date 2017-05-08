@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<head>
+<title>FunFunction</title>
+</head>
+<body>
+<div class="row">
+   <div class="col-sm-3"> </div>
+  <div class="col-sm-6">
+    <h1 style="text-align: center">FunFunction</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-1"></div>
+  <div class="col-sm-10">
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">f(x) = </span>
+      <input type="text" class="form-control" placeholder="Input your equation" id="eq">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" id="c">Do stuff</button>
+      </span>    
+    </div>
+    <br>
+    <p>Definisci l'intervallo</p>
+    <div class='row'>
+      <div class="col-sm-1">
+        <input type="number" class="form-control" placeholder="a" id="a"></div>
+      <div class="col-sm-1">
+        <input type="number" class="form-control" placeholder="b" id="b"></div>
+      <p id='er'></p>
+    </div>
+    <br><br>
+    <div class="row">
+      <div class="col-sm-3">
+        <h5>BISEZIONE </h5>
+      </div>
+      <div class="col-sm-3">
+        <h5>TANGENTE </h5>
+      </div>
+      <div class="col-sm-3">
+        <h5>SECANTI</h5>
+      </div>
+      <div class="col-sm-3">
+        <h5>PUNTO UNITO</h5>
+      </div>
+    </div>
+    <br><br>
+    <div class="row">
+      <div class="col-sm-1"></div>
+      <div id="curve_chart" class="col-sm-6" style="width: 1100px; height: 400px"></div>
+    </div>
+      <br>
+  <div class="row">
+    <div class="col-sm-4">
+      <h5>C.E. </h5>
+    </div>
+    <div class="col-sm-4">
+      <h5>SIMMETRIE </h5>
+    </div>
+    <div class="col-sm-4">
+      <h5>INTERSEZIONE CON GLI ASSI </h5>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+    <h5>STUDIO DEL SEGNO </h5>
+    </div>
+    <div class="col-sm-4">
+    <h5>LIMITI </h5>
+    </div>
+    <div class="col-sm-4">
+    <h5>DERIVATA </h5>
+    </div>
+    </div>
+  </div>
+  <br>
+  </div>
+
+</div>
+
+</body>
+<script type="text/javascript" src="jQ_320.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="math-dev.js"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+  class Cursor{
+    constructor(n){
+      this.a = n;
+    }
+    next(){
+      this.a = Math.round((this.a + .02) * 100) / 100
+      return this.a
+    }
+  }
+  
+  jQuery(document).ready(($) => {
+    google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([["0","0"],[0,0]]);
+      var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
+      var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+      chart.draw(data, options);
+    }
+    $("#c").click(() => {
+      $("#er").html('')
+      var a = parseFloat($("#a").val())
+      var b = parseFloat($("#b").val())
+      if(a>=b){$("#er").attr('style', 'color:red;').html("a dev'essere minore di b")}
+      else{
+        function chartPoints(equation){
+          let points = []
+          let cursor = a
+          while(cursor <= b) {
+            let y = Math.round(math.eval(equation, {'x': cursor}) * 1000) / 1000
+            if(Math.abs(y) < 25)
+              points.push([Math.round(cursor * 100) / 100, y])
+            cursor = Math.round((cursor + .02) * 100) / 100
+          }
+          console.log(points)
+          return points
+        }
+
+        function continuity(eq){
+          let cursor = a
+          let p = 0
+          while(cursor<=b){
+            p = math.eval(eq, {'x': cursor})
+            if(p == Infinity || p == -Infinity){
+              return false
+            }
+            cursor = Math.round((cursor + .02) * 100) / 100
+          }
+          return true
+        }
+
+        function existenceOfZero(eq){
+          if(continuity(eq)){
+            if(math.eval(eq, {'x': a}) * math.eval(eq, {'x': b}) < 0){
+              return true
+            }else{
+              return false
+            }
+          }else{return 'nc'}
+        }
+
+        function moreorless(derivative){
+          let cursor = a; let sign; let dh = derivative
+           if(math.eval(dh, {'x': cursor}) > 0) sign='+'
+           else if(math.eval(dh, {'x': cursor}) < 0) sign='-'
+           else
+             return false
+
+          while(cursor <= b){
+            if(math.eval(dh, {'x': cursor}) == 0 || math.eval(dh, {'x': cursor}) > 0 && sign == '-' || math.eval(dh, {'x': cursor}) < 0 && sign == '+'){
+              return false
+            }
+            else{
+              cursor = Math.round((cursor + .02) * 100) / 100
+            }
+          }
+          return true
+        }
+        
+        function uniqueness(equation,derivative1,derivative2){
+          let xis = existenceOfZero(equation)
+          console.log(xis, equation)
+          if(xis === true){
+            if(moreorless(derivative1) || moreorless(derivative2)){
+              $("#er").attr('style', 'color:black;').html("esiste un solo zero all'interno dell'intervallo")
+              return true
+            }else{
+              $("#er").attr('style', 'color:black;').html("esiste almeno uno zero all'interno dell'intervallo")
+              return false}
+          }
+          else if(xis === false){$("#er").attr('style', 'color:black;').html("non ci è dato sapere alcunché sugli zeri.... o sì?");return false}
+          else{$("#er").attr('style', 'color:black;').html("la funzione non è continua");return false}
+        }
+
+        function approximation(p, eq){
+          let x = p
+          for (var i = 210; i >= 1; i--) {
+            console.log(x)
+            x = math.eval(eq, {'x': x})
+          }
+          return x
+        }
+
+        function g1abs(eq){
+          let cursor = a; let p; let a;
+          while(cursor <= b){
+            a = Math.abs(math.eval(eq, {'x':cursor}))
+            if(a < 0.001) console.log(p); return
+            if(p > a) p = a; console.log(p)
+            cursor = Math.round((cursor + .02) * 100) / 100
+          }
+        }
+
+        function sec(eq){
+          let a = [{'x': b, 'f': math.eval(eq, {'x': b})},{'x': a, 'f': math.eval(eq, {'x': a})}]
+          for (var i =  210; i >= 1; i--) {
+            let x = a[0].x - a[0].f * ((a[0].x - a[1].x)/(a[0].f - a[1].f))
+            a.pop(); a.unshift({'x': x, 'f': math.eval(eq, {'x': x})})
+          }
+        }
+
+        function limits(equation, ce){
+          let limits = {}
+          limits.minf = math.eval(equation, {'x': -1000000000})
+          limits.pinf = math.eval(equation, {'x': 1000000000})
+          ce.forEach(n => {
+          limits[n] = {}
+            limits[n].m = math.eval(equation, {'x': n - .0001})
+            limits[n].p = math.eval(equation, {'x': n + .0001})
+          });
+          console.log(limits)
+          return limits
+        }
+
+        function obasymptote(eq, lim){
+          if(lim.minf > 1000000000.5 || lim.minf < -1000000000.5 || lim.pinf > 1000000000.5 || lim.pinf < -1000000000.5){
+            let m = math.eval('('+eq+')/x', {'x': 1000000000})
+            if(m < 1000000000.5){
+              let q = math.eval('('+eq+')-('+m+'*x)', {'x': 1000000000})
+              if(q<0) return 'y='+m+'x'+q
+              else return 'y='+m+'x+'+q
+            }
+          }return 'the function does not have any oblique asymptote'
+        }
+
+        function segno(eq){
+          let cursor = -3; let y;
+          let b = 3;
+          let segni = [];
+          y = math.eval(eq, {'x':cursor})
+          while(cursor < b){
+            let x1 = cursor ;
+              if(y>=0){
+                while(y>0 && cursor<b){
+                  cursor = Math.round((cursor + .02) * 100) / 100
+                  y = math.eval(eq, {'x':cursor})
+                }
+                segni.push({
+                  "x1":x1,
+                  "x2":cursor,
+                  "segno":"positivo"
+                });
+              }else if (y<0){
+                while(y<0 && cursor<b){
+                  cursor = Math.round((cursor + .02) * 100) / 100
+                  y = math.eval(eq, {'x':cursor})
+                }
+                segni.push({
+                  "x1":x1,
+                  "x2":cursor,
+                  "segno":"negativo"
+                });
+              }
+          }   
+          console.log(segni);   
+          return segni; 
+        }
+
+        exec()
+
+        function exec(){
+          let fx = $("#eq").val()
+          let gx = fx + '+x'
+          let d1 = math.derivative(math.parse(fx), 'x').toString()
+          let d2 = math.derivative(math.parse(d1), 'x').toString()
+          let g1 = math.derivative(math.parse(gx), 'x').toString()
+
+          /*if(uniqueness(fx, d1, d2)){
+            let p = g1abs(g1)
+            let ap
+            if(p === false){$("#er").append(' - the approximation method is not applicable')}
+            else{
+              ap = approximation(p, gx)
+              console.log(ap)
+            }
+          }*/
+
+          google.charts.load('current', {'packages':['line']});google.charts.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'x');
+            data.addColumn('number', fx);
+
+            data.addRows(chartPoints(fx));
+
+            var options = {
+              chart: {
+              },
+              width: 500,
+              height: 500
+            };
+
+            var chart = new google.charts.Line(document.getElementById('curve_chart'));
+
+            chart.draw(data, google.charts.Line.convertOptions(options));
+          }
+        }
+      }
+    });
+  });
+</script>
+</html>
