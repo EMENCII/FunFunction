@@ -245,14 +245,15 @@ pre{
           }return false
         }
         function segno(eq){ // Studio del segno torna un vettore di oggetti con dentro tutti i cambiamenti di segno della funzione
-          let cursor = -3; let y;
-          let b = 3;
+          let cursor = a; let y;
+          console.log(cursor,b);
           let segni = [];
           y = math.eval(eq, {'x':cursor})
+          console.log("y",y);
           while(cursor < b){
             let x1 = cursor ;
               if(y>=0){
-                  while(y>0 && cursor<b){
+                  while(y>=0 && cursor<b){
                     cursor = Math.round((cursor + .02) * 100) / 100
                     y = math.eval(eq, {'x':cursor})
                   }
@@ -282,29 +283,19 @@ pre{
         exec()
 
         function exec(){ // funzione principale
-         /* let fx = $("#eq").val()
-          //let gx = $("#eqx").val()
+          let fx = $("#eq").val()
+          console.log("fx",fx);
           let d1 = math.derivative(math.parse(fx), 'x').toString()
           let d2 = math.derivative(math.parse(d1), 'x').toString()
-          //let g1 = math.derivative(math.parse(gx), 'x').toString()   */
-          segno("x^2-3")
-        /*  if(uniqueness(fx, d1, d2)){
-            let p = g1abs(g1)
-            let ap
-            if(p === false){$("#res").append(' - the approximation method is not applicable')} //sempre riguardante il punto unito
-            else{
-              ap = approximation(p, gx)
-              console.log(ap)
-            }
-          }   */
+          segno(fx)   
           //chart stuff
-        /*  google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
+          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
           function drawChart() {
             var data = google.visualization.arrayToDataTable(chartPoints(fx));
             var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
             var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
             chart.draw(data, options);
-          } */
+          } 
         }
       }
     });
