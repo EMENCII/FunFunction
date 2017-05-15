@@ -88,14 +88,13 @@
 <script>
   class Cursor{
     constructor(n){
-      this.a = n;
+      this.c = n;
     }
     next(){
-      this.a = Math.round((this.a + .02) * 100) / 100
-      return this.a
+      this.c = Math.round((this.c + .02) * 100) / 100
+      return this.c
     }
   }
-  
   jQuery(document).ready(($) => {
     google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
@@ -111,27 +110,26 @@
       if(a>=b){$("#er").attr('style', 'color:red;').html("a dev'essere minore di b")}
       else{
         function chartPoints(equation){
-          let points = []
-          let cursor = a
-          while(cursor <= b) {
-            let y = Math.round(math.eval(equation, {'x': cursor}) * 1000) / 1000
+          let points = [['x', 'y']]
+          let c = new Cursor(a)
+          while(c.c <= b) {
+            let y = Math.round(math.eval(equation, {'x': c.c}) * 1000) / 1000
             if(Math.abs(y) < 25)
-              points.push([Math.round(cursor * 100) / 100, y])
-            cursor = Math.round((cursor + .02) * 100) / 100
+              points.push([c.c, y])
+            c.next()
           }
-          console.log(points)
           return points
         }
 
         function continuity(eq){
-          let cursor = a
+          let c = new Cursor(a)
           let p = 0
-          while(cursor<=b){
-            p = math.eval(eq, {'x': cursor})
-            if(p == Infinity || p == -Infinity){
+          while(c.c<=b){
+            p = math.eval(eq, {'x': c.c})
+            if(p == Infinity || p == -Infinity || p == Na){
               return false
             }
-            cursor = Math.round((cursor + .02) * 100) / 100
+            c.next()
           }
           return true
         }
@@ -147,18 +145,18 @@
         }
 
         function moreorless(derivative){
-          let cursor = a; let sign; let dh = derivative
-           if(math.eval(dh, {'x': cursor}) > 0) sign='+'
-           else if(math.eval(dh, {'x': cursor}) < 0) sign='-'
+          let c = new Cursor(a); let sign; let dh = derivative
+           if(math.eval(dh, {'x': c.c}) > 0) sign='+'
+           else if(math.eval(dh, {'x': c.c}) < 0) sign='-'
            else
              return false
 
-          while(cursor <= b){
-            if(math.eval(dh, {'x': cursor}) == 0 || math.eval(dh, {'x': cursor}) > 0 && sign == '-' || math.eval(dh, {'x': cursor}) < 0 && sign == '+'){
+          while(c.c <= b){
+            if(math.eval(dh, {'x': c.c}) == 0 || math.eval(dh, {'x': c.c}) > 0 && sign == '-' || math.eval(dh, {'x': c.c}) < 0 && sign == '+'){
               return false
             }
             else{
-              cursor = Math.round((cursor + .02) * 100) / 100
+              c.next()
             }
           }
           return true
@@ -189,12 +187,12 @@
         }
 
         function g1abs(eq){
-          let cursor = a; let p; let a;
-          while(cursor <= b){
-            a = Math.abs(math.eval(eq, {'x':cursor}))
+          let c = new Cursor(a); let p; let a;
+          while(c.c <= b){
+            a = Math.abs(math.eval(eq, {'x':c.c}))
             if(a < 0.001) console.log(p); return
             if(p > a) p = a; console.log(p)
-            cursor = Math.round((cursor + .02) * 100) / 100
+            c.next()
           }
         }
 
@@ -206,14 +204,18 @@
           }
         }
 
+        limits('(x^2-3x+1)/x^2', [{inizio:0,fine:3}])
+
         function limits(equation, ce){
           let limits = {}
           limits.minf = math.eval(equation, {'x': -1000000000})
           limits.pinf = math.eval(equation, {'x': 1000000000})
+          console.log(limits)
+          let counter = 0
           ce.forEach(n => {
-          limits[n] = {}
-            limits[n].m = math.eval(equation, {'x': n - .0001})
-            limits[n].p = math.eval(equation, {'x': n + .0001})
+            let i = n.inizio, f = n.fine
+            limits[i+'+'] = math.eval(equation, {'x': i - .0001})
+            limits[f.toString()] = math.eval(equation, {'x': f + .0001})
           });
           console.log(limits)
           return limits
@@ -230,39 +232,6 @@
           }return 'the function does not have any oblique asymptote'
         }
 
-        function segno(eq){
-          let cursor = -3; let y;
-          let b = 3;
-          let segni = [];
-          y = math.eval(eq, {'x':cursor})
-          while(cursor < b){
-            let x1 = cursor ;
-              if(y>=0){
-                while(y>0 && cursor<b){
-                  cursor = Math.round((cursor + .02) * 100) / 100
-                  y = math.eval(eq, {'x':cursor})
-                }
-                segni.push({
-                  "x1":x1,
-                  "x2":cursor,
-                  "segno":"positivo"
-                });
-              }else if (y<0){
-                while(y<0 && cursor<b){
-                  cursor = Math.round((cursor + .02) * 100) / 100
-                  y = math.eval(eq, {'x':cursor})
-                }
-                segni.push({
-                  "x1":x1,
-                  "x2":cursor,
-                  "segno":"negativo"
-                });
-              }
-          }   
-          console.log(segni);   
-          return segni; 
-        }
-
         exec()
 
         function exec(){
@@ -272,34 +241,12 @@
           let d2 = math.derivative(math.parse(d1), 'x').toString()
           let g1 = math.derivative(math.parse(gx), 'x').toString()
 
-          /*if(uniqueness(fx, d1, d2)){
-            let p = g1abs(g1)
-            let ap
-            if(p === false){$("#er").append(' - the approximation method is not applicable')}
-            else{
-              ap = approximation(p, gx)
-              console.log(ap)
-            }
-          }*/
-
-          google.charts.load('current', {'packages':['line']});google.charts.setOnLoadCallback(drawChart);
+          google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart);
           function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('number', 'x');
-            data.addColumn('number', fx);
-
-            data.addRows(chartPoints(fx));
-
-            var options = {
-              chart: {
-              },
-              width: 500,
-              height: 500
-            };
-
-            var chart = new google.charts.Line(document.getElementById('curve_chart'));
-
-            chart.draw(data, google.charts.Line.convertOptions(options));
+            var data = google.visualization.arrayToDataTable(chartPoints(fx));
+            var options = {title:'f(x)=0',curveType:'function',legend:{position:'bottom'}};
+            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, options);
           }
         }
       }
