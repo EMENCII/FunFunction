@@ -197,14 +197,18 @@
         }
 
         function sec(eq){
-          let a = [{'x': b, 'f': math.eval(eq, {'x': b})},{'x': a, 'f': math.eval(eq, {'x': a})}]
-          for (var i =  210; i >= 1; i--) {
-            let x = a[0].x - a[0].f * ((a[0].x - a[1].x)/(a[0].f - a[1].f))
-            a.pop(); a.unshift({'x': x, 'f': math.eval(eq, {'x': x})})
+          let m = {'x': a, 'f': math.eval(eq, {'x': a})}; let p = {'x': b, 'f': math.eval(eq, {'x': b})}
+          
+          for (var i =  210; i >= 1; i--){
+            var x = m.x - (p.x - m.x)/(p.f - m.f)
+            let f = math.eval(eq, {'x': x})
+            
+            if(p.f * f < 0)p.x = x; p.f = f
+            else if(p.f * f = 0) return x
+            else m.x = x; m.f = f
           }
+          return x
         }
-
-        limits('(x^2-3x+1)/x^2', [{inizio:0,fine:3}])
 
         function limits(equation, ce){
           let limits = {}

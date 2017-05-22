@@ -1,0 +1,63 @@
+<html><head>
+  <title>math.js | plot</title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.13.1/math.min.js"></script>
+
+  <!-- load http://maurizzzio.github.io/function-plot/ -->
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <script src="https://wzrd.in/standalone/function-plot@1.14.0"></script>
+
+  <style>
+    input[type=text] {
+      width: 300px;
+    }
+    input {
+      padding: 6px;
+    }
+    body, html, input {
+      font-family: sans-serif;
+      font-size: 11pt;
+
+    }
+    form {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+
+<form id="form">
+  <label for="eq">Enter an equation:</label>
+  <input type="text" id="eq" value="4 * sin(x) + 5 * cos(x/2)">
+  <input type="submit" value="Draw">
+</form>
+
+<div id="plot"><svg class="function-plot" font-size="9.8" width="550" height="350"><text class="top-right-legend" text-anchor="end" y="10" x="520" fill="#4682b4">5.633, -7.160</text><g class="canvas" transform="translate(30,20)"><defs><clipPath id="function-plot-clip-q9dc1f9c9cece8"><rect class="clip static-clip" width="490" height="310"></rect></clipPath><clipPath><marker id="q9dc1f9c9cece8-marker" viewBox="0 -5 10 10" refX="10" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,-5L10,0L0,5L0,0" stroke-width="0px" fill-opacity="1" fill="#777"></path></marker></clipPath></defs><g class="x axis" transform="translate(0,310)"><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-6</text></g><g class="tick" transform="translate(40.83333333333333,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-5</text></g><g class="tick" transform="translate(81.66666666666666,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-4</text></g><g class="tick" transform="translate(122.5,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-3</text></g><g class="tick" transform="translate(163.33333333333331,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-2</text></g><g class="tick" transform="translate(204.16666666666669,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">-1</text></g><g class="tick" transform="translate(245,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">0</text></g><g class="tick" transform="translate(285.83333333333337,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">1</text></g><g class="tick" transform="translate(326.66666666666663,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">2</text></g><g class="tick" transform="translate(367.5,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">3</text></g><g class="tick" transform="translate(408.33333333333337,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">4</text></g><g class="tick" transform="translate(449.16666666666663,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">5</text></g><g class="tick" transform="translate(490,0)" style="opacity: 1;"><line y2="0" x2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".71em" y="3" x="0" style="text-anchor: middle;">6</text></g><path class="domain" d="M0,0V0H490V0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></path></g><g class="y axis"><g class="tick" transform="translate(0,277.5)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">-3</text></g><g class="tick" transform="translate(0,236.66666666666666)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">-2</text></g><g class="tick" transform="translate(0,195.83333333333334)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">-1</text></g><g class="tick" transform="translate(0,155)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">0</text></g><g class="tick" transform="translate(0,114.16666666666667)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">1</text></g><g class="tick" transform="translate(0,73.33333333333334)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">2</text></g><g class="tick" transform="translate(0,32.50000000000001)" style="opacity: 1;"><line x2="0" y2="0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></line><text dy=".32em" x="-3" y="0" style="text-anchor: end;">3</text></g><path class="domain" d="M0,0H0V310H0" fill="none" stroke="black" shape-rendering="crispedges" opacity="0.1"></path></g><g clip-path="url(#function-plot-clip-q9dc1f9c9cece8)" class="content"><path class="y origin" stroke="black" opacity="0.2" d="M245,310L245,0"></path><path class="x origin" stroke="black" opacity="0.2" d="M0,155L490,155"></path><g class="graph"></g></g><g class="tip" clip-path="url(#function-plot-clip-q9dc1f9c9cece8)"><g class="inner-tip" transform="translate(475,330)" style="display: none;"><path stroke="grey" stroke-dasharray="5,5" opacity="0.5" d="M0,-330L0,330" class="tip-x-line" style="display: none;"></path><path stroke="grey" stroke-dasharray="5,5" opacity="0.5" d="M-510,0L510,0" class="tip-y-line" style="display: none;"></path><circle r="3" fill="#4682b4"></circle><text transform="translate(5,-5)" fill="#4682b4">(5.633, -7.160)</text></g></g><rect class="zoom-and-drag" width="490" height="310" style="fill: none; pointer-events: all;"></rect></g></svg></div>
+
+<script>
+  function draw() {
+    try {
+      functionPlot({
+        target: '#plot',
+        data: [{
+          fn: document.getElementById('eq').value,
+          sampler: 'builtIn',  // this will make function-plot use the evaluator of math.js
+          graphType: 'polyline'
+        }]
+      });
+    }
+    catch (err) {
+      console.log(err);
+      alert(err);
+    }
+  }
+
+  document.getElementById('form').onsubmit = function (event) {
+    event.preventDefault();
+    draw();
+  };
+
+  draw();
+</script>
+
+
+</body></html>
