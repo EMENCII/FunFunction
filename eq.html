@@ -23,46 +23,6 @@ pre{
 </style>
 </head>
 <body>
-<!--<div class="row">
-  <div class="col-sm-3"></div>
-  <div class="col-sm-6">
-    <p></p>
-    <h5>Metodo di risoluzione delle equazioni del punto unito</h5>
-    <br>
-    <div class="row">
-        grafico
-        <div id="curve_chart" class="col-sm-6" style="height: 500px"></div>
-    </div>
-    <div class="col-sm-10 row">
-      <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1">0 = </span>
-        <input type="text" class="form-control" placeholder="Input your equation" id="eq">
-        <span class="input-group-btn">
-          <button class="btn btn-default" type="button" id="c">Do stuff</button>
-        </span>    
-      </div>
-      <br>
-      <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1">x = </span>
-        <input type="text" class="form-control" placeholder="Convert your equation" id="eqx">
-      </div>
-    </div>
-    <div class="col-sm-2">
-      <input type="number" class="form-control" placeholder="a" id="a">
-      <br>
-      <input type="number" class="form-control" placeholder="b" id="b">
-    </div>
-    <br>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-sm-3"></div>
-  <div class='col-sm-6'>
-    <p id="res"></p>    
-  </div>
-</div>
--->
 <div class="row">
    <div class="col-sm-3"> </div>
   <div class="col-sm-6">
@@ -112,27 +72,44 @@ pre{
   <div class="row">
     <div class="col-sm-4">
       <h5>C.E. </h5>
+      <p id="CE"> </p>
     </div>
     <div class="col-sm-4">
       <h5>SIMMETRIE </h5>
+      <p id="Simmetrie"> </p>
     </div>
     <div class="col-sm-4">
       <h5>INTERSEZIONE CON GLI ASSI </h5>
+      <p id="Inters"> </p>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-4">
-    <h5>STUDIO DEL SEGNO </h5>
+        <h5>STUDIO DEL SEGNO </h5>
+        <p id="SDS"> </p>
     </div>
     <div class="col-sm-4">
-    <h5>LIMITI </h5>
+        <h5>LIMITI </h5>
+        <p id="Lim"> </p>
     </div>
     <div class="col-sm-4">
-    <h5>DERIVATA </h5>
-    </div>
+        <h5>DERIVATA </h5>
+        <p id="Dev"> </p>
     </div>
   </div>
   <br>
+  <div class="row">
+    <div class="col-sm-4">
+        <h5>CONCAVITA'</h5>
+        <p id="Conc"> </p>
+    </div>
+    <div class="col-sm-4">
+        <h5>ASINTOTI OBLIQUOI </h5>
+        <p id="A.O."> </p>
+    </div>
+  </div>
+  <br>
+
   </div>
 
 </div>
@@ -154,8 +131,8 @@ pre{
           }
     $("#c").click(() => {
       $("#res").html('')
-      var a = parseFloat("-10")//TODO dinamico
-      var b = parseFloat("10")
+      var a = parseFloat("0.5")//TODO dinamico
+      var b = parseFloat("5")
       if(a>=b){$("#res").attr('style', 'color:red;').html("a dev'essere minore di b")} //errore se l'inizio dell'intervallo è maggiore della fine
       else{
         function chartPoints(equation){ //calcola i punti della funzione
@@ -215,14 +192,24 @@ pre{
           let xis = existenceOfZero(equation)
           if(xis === true){ //se esiste uno zero
             if(moreorless(derivative1) || moreorless(derivative2)){ //se uno dei teoremi di unicità è verificato
-              $("#res").attr('style', 'color:black;').html("esiste un solo zero all'interno dell'intervallo")
+              //$("#res").attr('style', 'color:black;').html("esiste un solo zero all'interno dell'intervallo")
+              console.log("esiste un solo zero all'interno dell'intervallo");
               return true
             }else{
-              $("#res").attr('style', 'color:black;').html("esiste almeno uno zero all'interno dell'intervallo")
+             // $("#res").attr('style', 'color:black;').html("esiste almeno uno zero all'interno dell'intervallo")
+              console.log("esiste almeno uno zero all'interno dell'intervallo");
               return false}
           }
-          else if(xis === false){$("#res").attr('style', 'color:black;').html("non ci è dato sapere alcunché sugli zeri.... o sì?");return false}
-          else{$("#res").attr('style', 'color:black;').html("la funzione non è continua");return false}
+          else if(xis === false){
+            //$("#res").attr('style', 'color:black;').html("non ci è dato sapere alcunché sugli zeri.... o sì?");
+            console.log("non ci è dato sapere alcunché sugli zeri.... o sì?");
+            return false
+          }
+          else{
+            //$("#res").attr('style', 'color:black;').html("la funzione non è continua");
+            console.log("la funzione non è continua");
+            return false
+          }
         }
 
         function approximation(p, eq){ //metodo del punto unito v1.tuamadre
@@ -244,50 +231,153 @@ pre{
             }else{cursor = Math.round((cursor + .02) * 100) / 100}
           }return false
         }
-        function segno(eq){ // Studio del segno torna un vettore di oggetti con dentro tutti i cambiamenti di segno della funzione
+        function calcoloSegno(eq,comodo){ // Studio del segno torna un vettore di oggetti con dentro tutti i cambiamenti di segno della funzione
           let cursor = a; let y;
-          console.log(cursor,b);
           let segni = [];
           y = math.eval(eq, {'x':cursor})
-          console.log("y",y);
+          console.log("a",a)
+          console.log("y",y)
           while(cursor < b){
             let x1 = cursor ;
               if(y>=0){
+                console.log("primo if ")
                   while(y>=0 && cursor<b){
                     cursor = Math.round((cursor + .02) * 100) / 100
                     y = math.eval(eq, {'x':cursor})
                   }
-                  segni.push({
-                    "x1":x1,
-                    "x2":cursor,
-                    "segno":"positivo"
-                  });
+                  if(comodo==0){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"positivo"
+                    });
+                  }else if(comodo==1){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"crescente"
+                    });
+                  }else if(comodo==2){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"Concavità verso l'alto"
+                    });
+                  }
               }else if (y<0){
+                console.log("primo if ")
                   while(y<0 && cursor<b){
                     cursor = Math.round((cursor + .02) * 100) / 100
                     y = math.eval(eq, {'x':cursor})
                   }
-                  segni.push({
-                    "x1":x1,
-                    "x2":cursor,
-                    "segno":"negativo"
-                  });
+                  if(comodo==0){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"negativo"
+                    });
+                  }else if(comodo==1){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"decrescente"
+                    });
+                  }else if(comodo==2){
+                    segni.push({
+                      "x1":x1,
+                      "x2":cursor,
+                      "segno":"Concavità verso il basso "
+                    });
+                  }
+              }else{
+                console.log("else",y);
+                 while(typeof y === "object" && cursor<b){
+                    cursor = Math.round((cursor + .02) * 100) / 100
+                    y = math.eval(eq, {'x':cursor})
+                  }
               }
           }   
           console.log('segni fuori dal while',segni);   
           return segni; 
         }
-
+        function studioSegno(eq,d1,d2){
+          let studioDelSegno = [] ; 
+          let crescenza = [];
+          let concavità = [];
+          studioDelSegno=calcoloSegno(eq,0)
+          crescenza=calcoloSegno(d1,1)
+          concavità=calcoloSegno(d2,2)
+          console.log(studioDelSegno,crescenza,concavità)
+          for(var i = 0; i < crescenza.length ; i++){
+            $("#Dev").append("A = "+ crescenza[i].x1 + ' \n ' + "B = " + crescenza[i].x1 );  
+          }
+          
+        }
+       function metodoTangenti(eq,d1,d2){
+            let comodoA=a
+            let n = 0 
+            let ris 
+            let y2
+            if(uniqueness(eq,d1,d2)){
+                while(n<15){
+                  ris = comodoA-((math.eval(eq,{'x':comodoA})/(math.eval(d1,{'x':comodoA}))))
+                  y2 = math.eval(eq,{'x':ris})
+                  console.log("metodo Tangenti",ris,y2)
+                    comodoA=ris
+                  n++
+                  
+                }
+            }else {
+                console.log("in questa funzione non si può applicare il metodo di bisezione")
+            }
+            
+        }
+        
+        function metodoBisezione(eq,d1,d2){
+            let media
+            let x1=a
+            let x2=b
+            if(uniqueness(eq,d1,d2)){
+                for(var i = 0; i < 15; i++){
+                
+                    console.log("Primo if");
+                    media= (x1+x2)/2;
+                    fm = math.eval(eq, {'x':media})
+                    fa = math.eval(eq, {'x':x1})
+                    fb = math.eval(eq, {'x':x2})
+                    console.log("metodoBisezione",media);
+                    
+                    if(fm==0){
+                      console.log("Abbiamo trovato lo zero con x = ",media);
+                    }else if((fm*fa)<0) {
+                      x2=media;
+                      console.log("fm*fa<0");
+                    }else if((fm*fb)<0) {
+                      x1=media;
+                      console.log("fm*fb<0");
+                    }
+                    //console.log("media",media,"y",y);
+                }
+            }else {
+                console.log("in questa funzione non si può applicare il metodo di bisezione")
+            }
+            
+        }
 
 
         exec()
 
         function exec(){ // funzione principale
-          let fx = $("#eq").val()
-          console.log("fx",fx);
+          //let fx = "log(x^2-2x-3)" 
+          let fx = "x^3+x^7-25"
+          //let fx = $("#eq").val()
           let d1 = math.derivative(math.parse(fx), 'x').toString()
           let d2 = math.derivative(math.parse(d1), 'x').toString()
-          segno(fx)   
+          console.log(d1,d2);
+          metodoBisezione(fx,d1,d2);
+          metodoTangenti(fx,d1,d2)
+          calcoloSegno(fx,0)
+          //studioSegno(fx,d1,d2)   
           //chart stuff
           google.charts.load('current', {'packages':['corechart']});google.charts.setOnLoadCallback(drawChart); //disegna il grafico della funzione, il primo è solo 0,0
           function drawChart() {
